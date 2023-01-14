@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Tracker</title>
+</head>
+<style>
+    *{
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+
+    }
+    .container{
+        width: 100%;
+        height: 100px;
+        background-color: azure;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    .addMealinput{
+        width: 100%;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+}
+</style>
+<body onload="loadValues()">
+    <div class="container">
+        <h1>Welcome to meal tracker</h1> 
+    </div>
+    <table border="1" style="border-collapse: collapse;" id="nealData">
+        <thead>
+            <tr>
+                <th>Sr no</th>
+                <th>Meal Date</th>
+                <th>Taken</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <div class="addMealinput">
+        <div>
+            <label for="mealday">Date of the Meal: </label>
+            <input type="date" name="mealday" id="mealDay" readonly>
+        </div>
+        <div>
+            <label for="isTaken">Is MealTake</label>
+            <input type="checkbox" name="isTaken" id="istaken" />
+        </div>
+        <input type="button" value="Add Meal" onclick="addMeal()"/>
+    </div>
+</body>
+<script>
+
+    function loadValues(){
+        const date = new Date()
+        const month = (date.getUTCMonth() == 0 || date.getUTCMonth() < 9) ? `0${date.getUTCMonth() + 1}` : `${date.getUTCMonth() + 1}`;
+        var mealDate = document.querySelector('#mealDay');
+        mealDate.value = `${date.getUTCFullYear()}-${month}-${date.getUTCDate()}`;
+        mealDate.readonly = true
+        loadMealData()
+    }
+    function addMeal(){
+        const mealDate = document.querySelector('#mealDay');
+        const isTaken = document.querySelector('#istaken');
+        const storage = localStorage
+        const mealdata = []
+        if(storage.getItem('mealdata') != null){
+            mealdata.push(storage.getItem('mealdata')) 
+        } 
+
+        const data = {
+            "mealDate" : mealDate.value,
+            "isTaken" : isTaken.value 
+        }
+        const dummyArray = Object.entries(data)
+
+        console.log(dummyArray);
+        const currentData = []
+        currentData.push(JSON.stringify({
+            "mealDate" : mealDate.value,
+            "isTaken" : isTaken.value 
+        }));
+       
+        mealdata.push(currentData)
+        console.log(currentData)
+        storage.setItem('mealdata', mealdata)
+    }
+    function loadMealData(){
+        const storage = localStorage
+        const mealData = storage.getItem('mealdata')
+        const returningData = []
+
+        returningData.push(JSON.stringify(mealData))
+        returningData.forEach((e,idx)=>{
+            const meal = JSON.parse(e)
+            console.log(meal.mealDate)
+            console.log(JSON.parse(e))
+        })
+        console.log(mealData)
+    }
+  
+</script>
+</html>
