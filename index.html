@@ -110,7 +110,6 @@
         const month = (date.getUTCMonth() == 0 || date.getUTCMonth() < 9) ? `0${date.getUTCMonth() + 1}` : `${date.getUTCMonth() + 1}`;
         var mealDate = document.querySelector('#mealDay');
         mealDate.value = `${date.getUTCFullYear()}-${month}-${date.getUTCDate()}`;
-        mealDate.readonly = true
         loadMealData()
     }
     function addMeal(){
