@@ -81,10 +81,10 @@
     <div class="addMealinput">
         <div>
             <label for="mealday">Date of the Meal: </label>
-            <input type="date" name="mealday" id="mealDay" readonly>
+            <input type="date" name="mealday" id="mealDay" >
         </div>
         <div>
-            <label for="isTaken">Is MealTake: </label>
+            <label for="isTaken">Is MealTaken: </label>
             <input type="checkbox" name="isTaken" id="istaken" />
         </div>
         <input type="button" value="Add Meal" id="submitbtn" onclick="addMeal()"/>
@@ -94,6 +94,7 @@
             <tr>
                 <th>Meal Date</th>
                 <th>Taken</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -108,25 +109,31 @@
         const month = (date.getUTCMonth() == 0 || date.getUTCMonth() < 9) ? `0${date.getUTCMonth() + 1}` : `${date.getUTCMonth() + 1}`;
         var mealDate = document.querySelector('#mealDay');
         mealDate.value = `${date.getUTCFullYear()}-${month}-${date.getUTCDate()}`;
-        mealDate.readonly = true
         loadMealData()
     }
     function addMeal(){
         const mealDate = document.querySelector('#mealDay');
         const isTaken = document.querySelector('#istaken');
 
-        const mealDates = document.querySelector('#mealData').querySelectorAll('tbody')[0]?.querySelectorAll('tr')[0]?.querySelectorAll('td')
+        const mealDates = document.querySelector('#mealData').querySelectorAll('tbody')[0].querySelectorAll('tr')
+
         const storage = localStorage
         
         var recordExists =[]
+        
         if(mealDates != undefined){
-            recordExists = [...mealDates]?.filter(e=>{
-                if(e.textContent.trim() == mealDate.value.trim()){
+            
+            recordExists = [...mealDates].filter(e=>{
+                
+                const td = e.querySelectorAll('.mealDate')[0]
+                console.log(mealDate.value, td.textContent.trim() )
+                if(td.textContent.trim() == mealDate.value.trim()){
                     return true
                 }
             })
         }
 
+        
        
         
         if(recordExists.length > 0){
@@ -139,9 +146,9 @@
             var data = (storage.getItem('mealdata') != null) ? 
         storage.getItem('mealdata')
         +
-         `<tr> <td> ${mealDate.value} </td><td style='${css}'>${ mealTakenText }  </td></tr>`
+         `<tr> <td class='mealDate'> ${mealDate.value} </td><td style='${css}'>${ mealTakenText }  </td><td><button onclick='deleteRecord(this)'>Delete</button></td></tr>`
          :
-         `<tr> <td> ${mealDate.value} </td><td style='${css}'>${ mealTakenText }  </td></tr>`
+         `<tr> <td class='mealDate'> ${mealDate.value} </td><td style='${css}'>${ mealTakenText }  </td><td><button onclick='deleteRecord(this)'>Delete</button></td></tr>`
 
        
         storage.setItem('mealdata', data)
@@ -156,6 +163,15 @@
         const meal = document.querySelector('#mealData').querySelectorAll('tbody')[0]
         meal.innerHTML = mealData
 
+    }
+
+    function deleteRecord(row){
+        console.log(row)
+        row.parentElement.parentElement.remove()
+        const data = document.querySelector('#mealData').querySelectorAll('tbody')[0].innerHTML
+        const storage = localStorage
+        storage.removeItem('mealdata')
+        storage.setItem('mealdata', data);   
     }
   
 </script>
