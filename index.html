@@ -44,6 +44,7 @@
 
 #mealDay{
     background-color: grey;
+    color: white;
 }
 #mealDay:focus{
     border: 1px solid rgba(0, 194, 253, 0.753);
@@ -109,6 +110,7 @@
         const month = (date.getUTCMonth() == 0 || date.getUTCMonth() < 9) ? `0${date.getUTCMonth() + 1}` : `${date.getUTCMonth() + 1}`;
         var mealDate = document.querySelector('#mealDay');
         mealDate.value = `${date.getUTCFullYear()}-${month}-${date.getUTCDate()}`;
+        mealDate.readonly = true
         loadMealData()
     }
     function addMeal(){
